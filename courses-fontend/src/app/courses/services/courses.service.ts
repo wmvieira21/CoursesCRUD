@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class CoursesService {
-  private readonly URIGetCourses: string = '../../../assets/courses.json';
+  private readonly URIGetCourses: string = 'api/courses';
 
   constructor(private client: HttpClient) {}
 

@@ -6,9 +6,9 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class CategoryPipe implements PipeTransform {
   transform(value: string): string {
     switch (value) {
-      case 'Front-end':
+      case 'frontend':
         return 'code';
-      case 'Back-end':
+      case 'backend':
         return 'computer';
     }
     return 'code';
