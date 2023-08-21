@@ -1,9 +1,11 @@
+import { Location } from '@angular/common';
+import { HttpHeaderResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { NonNullableFormBuilder } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 import { Course } from '../model/course';
 import { CoursesService } from '../services/courses.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { HttpHeaderResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-course-form',
@@ -11,18 +13,17 @@ import { HttpHeaderResponse } from '@angular/common/http';
   styleUrls: ['./course-form.component.scss'],
 })
 export class CourseFormComponent implements OnInit {
-  form: FormGroup;
+  form = this.formBuilder.group({
+    name: [''],
+    category: ['']
+  });
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: NonNullableFormBuilder,
     private service: CoursesService,
-    private _snackBar: MatSnackBar
-  ) {
-    this.form = formBuilder.group({
-      name: [null],
-      category: [null],
-    });
-  }
+    private _snackBar: MatSnackBar,
+    private location: Location
+  ) {}
 
   ngOnInit(): void {}
 
@@ -30,21 +31,26 @@ export class CourseFormComponent implements OnInit {
     this.saveCourse(this.form.value);
   }
 
-  saveCourse(record: Course) {
+  saveCourse(record: Partial<Course>) {
     this.service.postSaveCourse(record).subscribe(
-      (result) => {
-        console.log(result);
-      },
+      (result) => this.onSucess(),
       (error) => this.onError(error)
     );
   }
 
+  private onSucess() {
+    this._snackBar.open('Course was saved!', '', {
+      duration: 3000,
+    });
+    this.onCancel();
+  }
   private onError(err: HttpHeaderResponse) {
-    console.log(err);
     this._snackBar.open('Error as saving: ' + err.statusText, '', {
       duration: 3000,
     });
   }
 
-  onCancel() {}
+  onCancel() {
+    this.location.back();
+  }
 }

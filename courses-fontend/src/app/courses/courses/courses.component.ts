@@ -5,7 +5,6 @@ import { ErrorDialogComponent } from 'src/app/shared/shared-components/component
 
 import { Course } from '../model/course';
 import { CoursesService } from './../services/courses.service';
-import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-courses',
@@ -13,16 +12,15 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./courses.component.scss'],
 })
 export class CoursesComponent implements OnInit {
-  dataSource$: Observable<Course[]>;
-  displayedColumns = ['name', 'category', 'actions'];
+  courses$: Observable<Course[]>;
+  // displayedColumns = ['name', 'category', 'actions'];
 
   constructor(
     private service: CoursesService,
-    public dialog: MatDialog,
-    private router: Router,
-    private route: ActivatedRoute
-  ) {
-    this.dataSource$ = this.service.getAllCourses().pipe(
+    public dialog: MatDialog // private router: Router,
+  ) // private route: ActivatedRoute
+  {
+    this.courses$ = this.service.getAllCourses().pipe(
       first(),
       tap((c) => console.log(c)),
       catchError((error) => {
@@ -40,7 +38,7 @@ export class CoursesComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  onAdd() {
-    this.router.navigate(['new'], { relativeTo: this.route });
-  }
+  // onAdd() {
+  //   this.router.navigate(['new'], { relativeTo: this.route });
+  // }
 }

@@ -16,7 +16,7 @@ export class CoursesService {
     return this.client.get<Course[]>(this.URIGetCourses);
   }
 
-  postSaveCourse(course: Course) {
+  postSaveCourse(course: Partial<Course>) {
     return this.client.post<Course>(this.URIGetCourses, course).pipe(first());
   }
 }

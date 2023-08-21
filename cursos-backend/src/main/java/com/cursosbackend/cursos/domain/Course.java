@@ -20,9 +20,11 @@ public class Course {
 	@JsonProperty("_id")
 	private Long id;
 	
+	@JsonProperty("name")
 	@Column(name = "course_name", length = 200, nullable = false)
 	private String name;
 	
+	@JsonProperty("category")
 	@Column(name = "course_category", length = 50, nullable = false)
 	private String category;
 

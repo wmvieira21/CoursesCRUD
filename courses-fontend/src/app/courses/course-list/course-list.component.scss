@@ -1,0 +1,14 @@
+mat-table {
+  overflow-y: auto;
+  max-height: 600px;
+  display: flex;
+  flex-direction: column;
+}
+
+.actions-align-header {
+  flex: 0 0 130px;
+}
+
+.actions-align-toolbox {
+  flex: 0 0 130px;
+}
