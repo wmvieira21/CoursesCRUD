@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Course } from '../model/course';
 
@@ -9,14 +9,15 @@ import { Course } from '../model/course';
 })
 export class CourseListComponent implements OnInit {
   @Input() courses: Course[] = [];
+  @Output('onAddEventEmitter') onAddEventEmitter = new EventEmitter(false);
 
   readonly displayedColumns = ['name', 'category', 'actions'];
 
-  constructor(private router: Router, private route: ActivatedRoute) {}
+  constructor() {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
+
   onAdd() {
-    this.router.navigate(['new'], { relativeTo: this.route });
+    this.onAddEventEmitter.emit(true);
   }
 }
