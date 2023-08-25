@@ -10,6 +10,7 @@ import { Course } from '../model/course';
 export class CourseListComponent implements OnInit {
   @Input() courses: Course[] = [];
   @Output('onAddEventEmitter') onAddEventEmitter = new EventEmitter(false);
+  @Output('onEditEventEmitter') onEditEventEmitter = new EventEmitter<Course>(false);
 
   readonly displayedColumns = ['name', 'category', 'actions'];
 
@@ -19,5 +20,9 @@ export class CourseListComponent implements OnInit {
 
   onAdd() {
     this.onAddEventEmitter.emit(true);
+  }
+
+  onEdit(course: Course) {
+    this.onEditEventEmitter.emit(course);
   }
 }

@@ -32,7 +32,7 @@
     </mat-header-cell>
 
     <mat-cell *matCellDef="let element" class="actions-align-toolbox">
-      <button mat-icon-button color="primary" aria-label="Edit course">
+      <button mat-icon-button color="primary" aria-label="Edit course" (click)="onEdit(element)">
         <mat-icon>edit</mat-icon>
       </button>
 

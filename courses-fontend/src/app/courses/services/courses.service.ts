@@ -16,7 +16,24 @@ export class CoursesService {
     return this.client.get<Course[]>(this.URIGetCourses);
   }
 
-  postSaveCourse(course: Partial<Course>) {
+  getCourseByID(id: string): Observable<Course> {
+    return this.client.get<Course>(`${this.URIGetCourses}/${id}`);
+  }
+
+  saveCourse(course: Partial<Course>) {
+    if (course._id) {
+      return this.updateCourse(course);
+    }
+    return this.createCourse(course);
+  }
+
+  private createCourse(course: Partial<Course>) {
     return this.client.post<Course>(this.URIGetCourses, course).pipe(first());
+  }
+
+  private updateCourse(course: Partial<Course>) {
+    return this.client
+      .put<Course>(`${this.URIGetCourses}/${course._id}`, course)
+      .pipe(first());
   }
 }
