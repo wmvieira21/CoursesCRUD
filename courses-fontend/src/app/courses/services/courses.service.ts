@@ -27,6 +27,10 @@ export class CoursesService {
     return this.createCourse(course);
   }
 
+  deleteCourse(id: string) {
+    return this.client.delete(`${this.URIGetCourses}/${id}`).pipe(first());
+  }
+
   private createCourse(course: Partial<Course>) {
     return this.client.post<Course>(this.URIGetCourses, course).pipe(first());
   }

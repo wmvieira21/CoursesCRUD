@@ -36,7 +36,7 @@
         <mat-icon>edit</mat-icon>
       </button>
 
-      <button mat-icon-button color="warn" aria-label="Delete course">
+      <button mat-icon-button color="warn" aria-label="Delete course" (click)="onDelete(element._id)">
         <mat-icon>delete</mat-icon>
       </button>
     </mat-cell>

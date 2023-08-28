@@ -3,6 +3,7 @@ package com.cursosbackend.cursos.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.cursosbackend.cursos.domain.Course;
@@ -25,18 +26,22 @@ public class CourseService {
 		return courseRepository.save(course);
 	}
 
-	public Optional<Course> getCourseByID(Long id) {
+	public Optional<Course> findByID(Long id) {
 		return courseRepository.findById(id);
 	}
 
 	public Course updateCourse(Long id, Course course) {
-		Course tempCourse = this.getCourseByID(id).orElse(null);
-		
+		Course tempCourse = this.findByID(id).orElse(null);
+
 		if (tempCourse != null) {
 			tempCourse.setName(course.getName());
 			tempCourse.setCategory(course.getCategory());
 			return courseRepository.save(course);
 		}
 		return null;
+	}
+
+	public void delete(Long id) {
+		courseRepository.deleteById(id);
 	}
 }

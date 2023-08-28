@@ -6,6 +6,7 @@ import { ErrorDialogComponent } from 'src/app/shared/shared-components/component
 import { Course } from '../model/course';
 import { CoursesService } from './../services/courses.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-courses',
@@ -13,22 +14,16 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./courses.component.scss'],
 })
 export class CoursesComponent implements OnInit {
-  courses$: Observable<Course[]>;
+  courses$: Observable<Course[]> | null = null;
 
   constructor(
     private service: CoursesService,
     public dialog: MatDialog,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private _snackBar: MatSnackBar
   ) {
-    this.courses$ = this.service.getAllCourses().pipe(
-      first(),
-      tap((c) => console.log(c)),
-      catchError((error) => {
-        this.onErrorMessage('No data found!');
-        return of([]);
-      })
-    );
+    this.refresh();
   }
 
   onErrorMessage(error: string) {
@@ -45,5 +40,30 @@ export class CoursesComponent implements OnInit {
 
   onEdit(course: Course) {
     this.router.navigate(['edit', course._id], { relativeTo: this.route });
+  }
+
+  onDelete(id: string) {
+    this.service.deleteCourse(id).subscribe({
+      next: (v) => {
+        this.refresh();
+        this._snackBar.open('Course was deleted!', '', {
+          duration: 3000,
+          verticalPosition: 'top',
+          horizontalPosition: 'center',
+        });
+      },
+      error: (e) => this.onErrorMessage("Course couldn't be removed!"),
+    });
+  }
+
+  refresh() {
+    this.courses$ = this.service.getAllCourses().pipe(
+      first(),
+      tap((c) => console.log(c)),
+      catchError((error) => {
+        this.onErrorMessage('No data found!');
+        return of([]);
+      })
+    );
   }
 }
