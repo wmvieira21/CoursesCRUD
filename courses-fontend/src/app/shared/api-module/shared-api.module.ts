@@ -25,7 +25,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatIconModule,
     MatInputModule,
     MatSelectModule,
-    MatSnackBarModule,
+    MatSnackBarModule
   ],
 })
 export class SharedAPIModule {}

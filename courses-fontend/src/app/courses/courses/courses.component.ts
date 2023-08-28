@@ -7,6 +7,7 @@ import { Course } from '../model/course';
 import { CoursesService } from './../services/courses.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ConfirmationDialogComponent } from 'src/app/shared/shared-components/components/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-courses',
@@ -43,6 +44,10 @@ export class CoursesComponent implements OnInit {
   }
 
   onDelete(id: string) {
+    this.openDialog(id);
+  }
+
+  private deleteCourse(id: string) {
     this.service.deleteCourse(id).subscribe({
       next: (v) => {
         this.refresh();
@@ -56,7 +61,7 @@ export class CoursesComponent implements OnInit {
     });
   }
 
-  refresh() {
+  private refresh() {
     this.courses$ = this.service.getAllCourses().pipe(
       first(),
       tap((c) => console.log(c)),
@@ -65,5 +70,17 @@ export class CoursesComponent implements OnInit {
         return of([]);
       })
     );
+  }
+
+  private openDialog(id: string): void {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      data: 'Are you sure?',
+    });
+
+    dialogRef.afterClosed().subscribe((result: boolean) => {
+      if (result) {
+        this.deleteCourse(id);
+      }
+    });
   }
 }
