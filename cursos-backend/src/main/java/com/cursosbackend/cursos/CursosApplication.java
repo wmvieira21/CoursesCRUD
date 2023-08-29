@@ -21,7 +21,7 @@ public class CursosApplication {
 	CommandLineRunner initdatabase(CourseRepository courseRepository) {
 		return args -> {
 			Course course = new Course(null, "Angular", "frontend");
-			Course course1 = new Course(null, "Java", "backend");
+			Course course1 = new Course(null, "Java8", "backend");
 			Course course2 = new Course(null, "React", "frontend");
 			Course course3 = new Course(null, "Srping Boot", "backend");
 			courseRepository.deleteAll();
