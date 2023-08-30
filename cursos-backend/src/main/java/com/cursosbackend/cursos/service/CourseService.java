@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.cursosbackend.cursos.domain.Course;
+import com.cursosbackend.cursos.dto.CourseDTO;
 import com.cursosbackend.cursos.exceptions.ObjetNotFound;
 import com.cursosbackend.cursos.repository.CourseRepository;
 
@@ -23,26 +24,25 @@ public class CourseService {
 		return courseRepository.findAll();
 	}
 
-	public Course create(Course course) {
-		return courseRepository.save(course);
+	public CourseDTO create(CourseDTO courseDTO) {
+		Course course = new Course(null, courseDTO.name(), courseDTO.category());
+		course = courseRepository.save(course);
+		return new CourseDTO(course.getId(), course.getName(), course.getCategory());
 	}
 
-	public Course findByID(Long id) {
-		return courseRepository.findById(id).orElseThrow(() -> new ObjetNotFound(id));
+	public CourseDTO findByID(Long id) {
+		return courseRepository.findById(id).map(c -> new CourseDTO(c.getId(), c.getName(), c.getCategory()))
+				.orElseThrow(() -> new ObjetNotFound(id));
 	}
 
-	public Course updateCourse(Long id, Course course) {
-		Course tempCourse = this.findByID(id);
-
-		if (tempCourse != null) {
-			tempCourse.setName(course.getName());
-			tempCourse.setCategory(course.getCategory());
-			return courseRepository.save(course);
-		}
-		return null;
+	public CourseDTO updateCourse(Long id, CourseDTO courseDTO) {
+		CourseDTO tempCourse = this.findByID(id);
+		Course course = courseRepository.save(new Course(tempCourse.id(), courseDTO.name(), courseDTO.category()));
+		return new CourseDTO(id, course.getName(), course.getCategory());
 	}
 
 	public void delete(Long id) {
-		courseRepository.delete(this.findByID(id));;
+		CourseDTO dto = this.findByID(id);
+		courseRepository.delete(new Course(dto.id(), dto.name(), dto.category()));
 	}
 }

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cursosbackend.cursos.domain.Course;
+import com.cursosbackend.cursos.dto.CourseDTO;
 import com.cursosbackend.cursos.service.CourseService;
 
 import jakarta.validation.Valid;
@@ -41,22 +42,19 @@ public class CourseController {
 	}
 
 	@GetMapping(value = "/{id}")
-	public Course findByID(@PathVariable @NotNull @Positive Long id) {
+	public CourseDTO findByID(@PathVariable @NotNull @Positive Long id) {
 		return courseService.findByID(id);
 	}
 
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
-	public Course createCourse(@RequestBody @Valid Course course) {
-		Course c = this.courseService.create(course);
-		return c;
+	public CourseDTO createCourse(@RequestBody @Valid CourseDTO course) {
+		return this.courseService.create(course);
 	}
 
 	@PutMapping(value = "/{id}")
-	public Course updateCourse(@PathVariable @NotNull @Positive Long id, @RequestBody @Valid Course course) {
-		Course courseUpdated = courseService.updateCourse(id, course);
-
-		return courseUpdated;
+	public CourseDTO updateCourse(@PathVariable @NotNull @Positive Long id, @RequestBody @Valid CourseDTO course) {
+		return courseService.updateCourse(id, course);
 	}
 
 	@DeleteMapping(value = "/{id}")
