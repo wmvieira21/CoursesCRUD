@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.cursosbackend.cursos.domain.Course;
+import com.cursosbackend.cursos.exceptions.ObjetNotFound;
 import com.cursosbackend.cursos.repository.CourseRepository;
 
 @Service
@@ -26,12 +27,12 @@ public class CourseService {
 		return courseRepository.save(course);
 	}
 
-	public Optional<Course> findByID(Long id) {
-		return courseRepository.findById(id);
+	public Course findByID(Long id) {
+		return courseRepository.findById(id).orElseThrow(() -> new ObjetNotFound(id));
 	}
 
 	public Course updateCourse(Long id, Course course) {
-		Course tempCourse = this.findByID(id).orElse(null);
+		Course tempCourse = this.findByID(id);
 
 		if (tempCourse != null) {
 			tempCourse.setName(course.getName());
@@ -42,6 +43,6 @@ public class CourseService {
 	}
 
 	public void delete(Long id) {
-		courseRepository.deleteById(id);
+		courseRepository.delete(this.findByID(id));;
 	}
 }
