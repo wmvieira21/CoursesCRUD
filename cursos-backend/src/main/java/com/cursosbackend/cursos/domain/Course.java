@@ -6,10 +6,18 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.hibernate.validator.constraints.Length;
 
+import com.cursosbackend.cursos.enums.Category;
+import com.cursosbackend.cursos.enums.Status;
+import com.cursosbackend.cursos.enums.converters.CategoryConverter;
+import com.cursosbackend.cursos.enums.converters.StatusConverter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Converter;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -40,22 +48,24 @@ public class Course {
 	@JsonProperty("category")
 	@Column(name = "course_category", length = 50, nullable = false)
 	@NotNull
-	@Length(max = 50)
-	@Pattern(regexp = "backend|frontend")
-	private String category;
+	// @Pattern(regexp = "backend|frontend")
+	// @Enumerated(EnumType.STRING)
+	@Convert(converter = CategoryConverter.class)
+	private Category category;
 
 	@JsonProperty("status")
-	@NotNull
-	@Length(max = 15)
-	@Pattern(regexp = "Active|Deactivated")
 	@Column(name = "course_status", nullable = false, length = 15)
-	private String status = "Active";
+	@NotNull
+	// @Length(max = 15)
+	// @Pattern(regexp = "Active|Deactivated")
+	@Convert(converter = StatusConverter.class)
+	private Status status = Status.ACTIVE;
 
 	public Course() {
 		super();
 	}
 
-	public Course(Long id, String name, String category) {
+	public Course(Long id, String name, Category category) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -78,11 +88,11 @@ public class Course {
 		this.name = name;
 	}
 
-	public String getCategory() {
+	public Category getCategory() {
 		return category;
 	}
 
-	public void setCategory(String category) {
+	public void setCategory(Category category) {
 		this.category = category;
 	}
 

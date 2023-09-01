@@ -25,9 +25,9 @@ public class CourseService {
 	}
 
 	public CourseDTO create(CourseDTO courseDTO) {
-		Course course = new Course(null, courseDTO.name(), courseDTO.category());
+		Course course = new Course(null, courseDTO.name(), courseMapper.converteToCategory(courseDTO.category()));
 		course = courseRepository.save(course);
-		return new CourseDTO(course.getId(), course.getName(), course.getCategory());
+		return new CourseDTO(course.getId(), course.getName(), course.getCategory().getValue());
 	}
 
 	public CourseDTO findByID(Long id) {
@@ -36,7 +36,8 @@ public class CourseService {
 
 	public CourseDTO updateCourse(Long id, CourseDTO courseDTO) {
 		CourseDTO tempCourse = this.findByID(id);
-		Course course = new Course(tempCourse.id(), courseDTO.name(), courseDTO.category());
+		Course course = new Course(tempCourse.id(), courseDTO.name(),
+				courseMapper.converteToCategory(courseDTO.category()));
 		course = courseRepository.save(course);
 		return courseMapper.toDTO(course);
 	}
