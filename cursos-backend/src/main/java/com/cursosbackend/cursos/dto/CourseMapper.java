@@ -1,15 +1,21 @@
 package com.cursosbackend.cursos.dto;
 
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 import com.cursosbackend.cursos.domain.Course;
+import com.cursosbackend.cursos.domain.Lesson;
 import com.cursosbackend.cursos.enums.Category;
 
 @Component
 public class CourseMapper {
 
 	public CourseDTO toDTO(Course course) {
-		return new CourseDTO(course.getId(), course.getName(), course.getCategory().getValue());
+		List<LessonDTO> lessons = course.getLessons().stream()
+				.map(c -> new LessonDTO(c.getId(), c.getName(), c.getYoutubeURL())).toList();
+
+		return new CourseDTO(course.getId(), course.getName(), course.getCategory().getValue(), lessons);
 	}
 
 	public Course toEntity(CourseDTO course) {

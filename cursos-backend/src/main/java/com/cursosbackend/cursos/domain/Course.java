@@ -1,5 +1,8 @@
 package com.cursosbackend.cursos.domain;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import org.hibernate.annotations.SQLDelete;
@@ -12,6 +15,7 @@ import com.cursosbackend.cursos.enums.converters.CategoryConverter;
 import com.cursosbackend.cursos.enums.converters.StatusConverter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Converter;
@@ -21,6 +25,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -31,7 +37,9 @@ import jakarta.validation.constraints.Pattern;
 @SQLDelete(sql = "update tb_course set course_status = 'Deactivated' where id = ?")
 @Where(clause = "course_status = 'Active'")
 
-public class Course {
+public class Course implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -60,6 +68,9 @@ public class Course {
 	// @Pattern(regexp = "Active|Deactivated")
 	@Convert(converter = StatusConverter.class)
 	private Status status = Status.ACTIVE;
+
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "course")
+	private List<Lesson> lessons = new ArrayList<>();
 
 	public Course() {
 		super();
@@ -94,6 +105,18 @@ public class Course {
 
 	public void setCategory(Category category) {
 		this.category = category;
+	}
+
+	public Status getStatus() {
+		return status;
+	}
+
+	public void setStatus(Status status) {
+		this.status = status;
+	}
+
+	public List<Lesson> getLessons() {
+		return lessons;
 	}
 
 	@Override

@@ -27,7 +27,7 @@ public class CourseService {
 	public CourseDTO create(CourseDTO courseDTO) {
 		Course course = new Course(null, courseDTO.name(), courseMapper.converteToCategory(courseDTO.category()));
 		course = courseRepository.save(course);
-		return new CourseDTO(course.getId(), course.getName(), course.getCategory().getValue());
+		return new CourseDTO(course.getId(), course.getName(), course.getCategory().getValue(), null);
 	}
 
 	public CourseDTO findByID(Long id) {
