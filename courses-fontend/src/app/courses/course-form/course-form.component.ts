@@ -1,12 +1,18 @@
 import { Location } from '@angular/common';
 import { HttpHeaderResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { NonNullableFormBuilder, Validators } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  NonNullableFormBuilder,
+  Validators,
+} from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Course } from '../model/course';
 import { CoursesService } from '../services/courses.service';
 import { ActivatedRoute } from '@angular/router';
+import { Lesson } from '../model/lesson';
 
 @Component({
   selector: 'app-course-form',
@@ -14,14 +20,16 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./course-form.component.scss'],
 })
 export class CourseFormComponent implements OnInit {
-  form = this.formBuilder.group({
-    _id: [''],
-    name: [
-      '',
-      [Validators.required, Validators.maxLength(100), Validators.minLength(5)],
-    ],
-    category: ['', Validators.required],
-  });
+  form!: FormGroup;
+
+  // form = this.formBuilder.group({
+  //   _id: [''],
+  //   name: [
+  //     '',
+  //     [Validators.required, Validators.maxLength(100), Validators.minLength(5)],
+  //   ],
+  //   category: ['', Validators.required],
+  // });
 
   constructor(
     private formBuilder: NonNullableFormBuilder,
@@ -34,11 +42,20 @@ export class CourseFormComponent implements OnInit {
   ngOnInit(): void {
     const course: Course = this.route.snapshot.data['courseResolv'];
 
-    this.form.setValue({
-      _id: course._id,
-      name: course.name,
-      category: course.category,
+    this.form = this.formBuilder.group({
+      _id: [course._id],
+      name: [
+        course.name,
+        [
+          Validators.required,
+          Validators.maxLength(100),
+          Validators.minLength(5),
+        ],
+      ],
+      category: [course.category, Validators.required],
+      lessons: this.formBuilder.array(this.retrieveLessons(course))
     });
+    console.log(this.form);
   }
 
   onSave() {
@@ -85,6 +102,26 @@ export class CourseFormComponent implements OnInit {
   private onError(err: HttpHeaderResponse) {
     this._snackBar.open('Error as saving: ' + err.statusText, '', {
       duration: 3000,
+    });
+  }
+
+  private retrieveLessons(course: Course) {
+    const lessons = [];
+    if (course?.lessons) {
+      course.lessons.forEach((lesson) =>
+        lessons.push(this.createLesson(lesson))
+      );
+    } else {
+      lessons.push(this.createLesson());
+    }
+    return lessons;
+  }
+
+  private createLesson(lesson: Lesson = { id: '', name: '', youtubeUrl: '' }) {
+    return this.formBuilder.group({
+      id: new FormControl([lesson.id]),
+      name: new FormControl([lesson.name]),
+      youtubeUrl: new FormControl([lesson.youtubeUrl]),
     });
   }
 }

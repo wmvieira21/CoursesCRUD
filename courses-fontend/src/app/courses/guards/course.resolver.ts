@@ -10,5 +10,5 @@ export const courseResolver: ResolveFn<Course> = (route, state) => {
     return inject(CoursesService).getCourseByID(route.params['id']);
   }
 
-  return of<Course>({ _id: '', name: '', category: '' });
+  return of<Course>({ _id: '', name: '', category: '' , lessons: []});
 };
