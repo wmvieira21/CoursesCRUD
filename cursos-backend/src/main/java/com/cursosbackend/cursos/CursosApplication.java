@@ -27,9 +27,9 @@ public class CursosApplication {
 			Course course2 = new Course(null, "React", Category.FRONTEND);
 			Course course3 = new Course(null, "Srping Boot", Category.BACKEND);
 
-			Lesson lesson1 = new Lesson(null, "Lesson 1", "https://youtu.be/Nb4uxLxdvxo?si=buk1RVq6wMinZNKJ", course);
+			Lesson lesson1 = new Lesson(null, "Lesson 1", "Nb4uxLxdvxo?si=buk1RVq6wMinZNKJ", course);
 			course.getLessons().add(lesson1);
-			Lesson lesson2 = new Lesson(null, "Lesson 2", "https://youtu.be/Nb4uxLxdvxo?si=buk1RVq6wMinZNKJ", course);
+			Lesson lesson2 = new Lesson(null, "Lesson 2", "Nb4uxLxdvxo?si=buk1RVq6wMinZNKJ", course);
 			course.getLessons().add(lesson2);
 
 			courseRepository.deleteAll();

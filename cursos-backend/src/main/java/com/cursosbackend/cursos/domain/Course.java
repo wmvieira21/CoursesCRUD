@@ -115,6 +115,10 @@ public class Course implements Serializable {
 		this.status = status;
 	}
 
+	public void setLessons(List<Lesson> lessons) {
+		this.lessons = lessons;
+	}
+
 	public List<Lesson> getLessons() {
 		return lessons;
 	}

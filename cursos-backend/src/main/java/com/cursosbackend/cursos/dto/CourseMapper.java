@@ -18,8 +18,14 @@ public class CourseMapper {
 		return new CourseDTO(course.getId(), course.getName(), course.getCategory().getValue(), lessons);
 	}
 
-	public Course toEntity(CourseDTO course) {
-		return new Course(course.id(), course.name(), converteToCategory(course.category()));
+	public Course toEntity(CourseDTO courseDTO) {
+		var course = new Course(courseDTO.id(), courseDTO.name(), converteToCategory(courseDTO.category()));
+		
+		List<Lesson> lessons = courseDTO.lessons().stream()
+				.map(lesson -> new Lesson(lesson.id(), lesson.name(), lesson.youtubeUrl(), course)).toList();
+		
+		course.setLessons(lessons);
+		return course;
 	}
 
 	public Category converteToCategory(String value) {
